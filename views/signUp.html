@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.2/dist/lux/bootstrap.min.css">
+    <style>
+        body {
+            place-content: center;
+            text-align: center;
+        }
+
+        form {
+            padding: 5%;
+            margin-left: 10%;
+            margin-right: 10%;
+            text-align: center;
+            
+        }
+
+        input, button {
+            margin-bottom: 2%;
+        }
+    </style>
+</head>
+<body>
+
+    <form method="post" action="/signUp">
+        <div>
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAAEQklEQVR4nO2Za4hVVRTHf46a10TElF4aDSkEJQhK0EtChaZMP6QQZjXR44NCH4Sgh5QJ9kAhJMoHfZhR0CBHJImiEose1lCWWr6gIsVKSzN6UOo4c2Nd/ic2l3P22eec63iF84fDMHP++7/3OnvttdZeAyVKlChRABcC84B1wE7gN+AM8DLnCSrAIuB3oBrz9ABX0uS4AvjSWfQBYDEwA7gaeE1/Pwl8CCwABtFkGA18p4X+BMyK4YwDPgJ+cYzdCgyhidClhe0FRgXwZ8lgG/MK/YwWYAqwUi50RGdhPtAH/A20ZtCbJDezILAceBs4DPwB/AlcfzaMGC+/jjvAffr5Ug7dVxM0q8BnwFRgcKOMmKivZOIngFXAbGAycNSZOM8XnKqxvwJ3aa4J2pFI92vgmqJGjNB2m+AbOtT1RkaRyFwvKy7SeHNRF+Z2TwN79P5bYHgBO2o5wYQ+BS6IeT9ArmU7lRd9euJgeWmH1vB4gTnYJZFpHs5fQC8wNId+Rfr/eDi3i7ObnBgInAL+TUlc2zTRLTnmmKKxX3k4Q1QR9OTNOQP0pS3e+/BMgai1XmOXpPCOiHcZOXFUBznufER4X5M8mUN/pca+6+G0yH2NN5KCGbvNw4kmyRNVrtLYHwPcbycF8IVEHvJwolIjS1aP0Kaxn3g4CwPOUSp6JTLMw1kjzhbgkgzaVkR2a+xTHt5QJznauc2FgxK40cMZrexrvNUZtLdozJ4U379JvB8ogOVO5h7r4U0Qb3+G0H5cO27VQxIu19ymvYwCsLi9WUIPp0SWKEReF6B7W+ABbhfvzZTIGYQ7JLY9hfeCeB+k1F2DnLPxWIrmNvHm0gBUnCrX7h5JGOnwng8w+FBKELnHKSh97pcJ0RZ/Hsjb5OFsEse6LATwHqWBuEGiduf2YZ54GzycqAlxd4rWhkBeJkyX6DspvAfE6/RwOsUxrg8dAUEmc+SKSpW1geHakmRaAk0Lp0vEs6vEpRQ85A8qN1RVU12bwLUo9YgaCVX1spIwU5wzGtPiSbQHxbVO5VLllWBcDDwHHHNKg290R48ztt25xdnzYsAcKxz+DmmYVj2sbH/L4Z7S2bEEnAjrVjyrtk40sFthsD4Ztco1XGN/Bu4lHO1OEq1Ka1lC8Xkz8DpwWtxeufnwuF342GnvbE7I0ON0WHvqjL0/4YumoaKx3XX94U7NVY8x2s2TTkOw1a17tjv3ArO+HgN1EzztbHFHgrvlhWl1SLuquRYnnKHxTqG6O+p93ac/HFcjOs6ILme3Os5yR71Vc0SNv41aQz1GqCL+P0S/p1+eSBBeqvfWNJtD/2GO06iz4BOH+Xpv1+3aTkTh9UTME/WdbqX/0ebsjO+p9dX2BRAtYpwrdAWsr1Y6DVblGvd8L+Kd59CQ2VqDffBcqDiZuhmenpwhvpYE9zaBAVUnZzTsXwwlSpQoUYJG4D8zfL5hqU0xoAAAAABJRU5ErkJggg==" alt="conference-call--v1">
+            <br>
+            <label for="exampleInputEmail1" class="form-label mt-4">Cree una cuenta para acceder al sistema.</label>
+            <input required class="form-control" name="user" placeholder="Usuario">
+            <input required class="form-control" name="password" placeholder="Contraseña">
+            <input required class="form-control" name="name" placeholder="Nombre del doctor">
+            <br>
+            <button class="btn btn-primary">Registrarse</button>
+        </div>
+    </form>
+
+</body>
+</html>
