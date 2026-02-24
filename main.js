@@ -43,10 +43,10 @@ app.post("/logIn", async (req, res) => {
     try {
         
         let { user, password } = req.body;
-        let doctor = await Doctor.findOne({ user: user })
+        let doctor = await Doctor.findOne({ user: user.trim() })
         if (doctor == null) return res.send("<h3>No se ha encontrado su nombre de Usuario</h3>");
         let newPassword = zlib.inflateSync(doctor.password);
-        if (password == newPassword) {
+        if (password.trim() == newPassword) {
             console.log(doctor);
             return res.render("menu.ejs", { doctor })
         } else {
@@ -75,11 +75,11 @@ app.post("/signUp", async (req, res) => {
         let userExists = await Doctor.exists({ user: req.body.user });
         if (userExists == null) {
             let { user, password, name } = req.body;
-            let compressedPassword = zlib.deflateSync(password);
+            let compressedPassword = zlib.deflateSync(password.trim());
             let doctor1 = Doctor.create({
-                user: user,
+                user: user.trim(),
                 password: compressedPassword,
-                name: name
+                name: name.trim()
             });
             return res.redirect("/");
         };
