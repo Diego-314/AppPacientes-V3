@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menú</title>
+    <title>Pacientes</title>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.2/dist/lux/bootstrap.css">
     <style>
@@ -12,21 +12,6 @@
             width: 50px;
             height: auto;
             display: block;
-        }
-
-        .welcome-text {
-            text-align: center;
-            margin-top: 2%;
-            opacity: 0;
-            transform: translateY(-80px);
-            animation: slideDown 0.8s ease-out forwards;
-        }
-
-        @keyframes slideDown {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
     </style>
 </head>
@@ -42,7 +27,7 @@
             <div class="collapse navbar-collapse" id="navbarColor03">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="/Inicio">Inicio
+                        <a class="nav-link" href="/Inicio">Inicio
                             <span class="visually-hidden">(current)</span>
                         </a>
                     </li>
@@ -50,7 +35,7 @@
                         <a class="nav-link" href="/Configuración">Configuración</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/Pacientes">Pacientes</a>
+                        <a class="nav-link active" href="/Pacientes">Pacientes</a>
                     </li>
                 </ul>
                 <form class="d-flex">
@@ -81,49 +66,6 @@
             </div>
         </div>
     </div>
-
-    <div class="welcome-text">
-        <h1>¡Bienvenido, <%= doctor.name %>!</h1>
-    </div>
-
-    <div class="m-5">
-        <table class="table table-hover">
-
-
-            <% if (!doctor.data==null) { %>
-                <thead>
-                    <tr>
-                        <th scope="col">Apellido</th>
-                        <th scope="col">Nombre</th>
-                        <th scope="col">DNI</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% for (let i=0; i < 5; i++) { %>
-                        <tr>
-                            <th scope="col">
-                                <%= doctor.data[i].surname %>
-                            </th>
-                            <th scope="col">
-                                <%= doctor.data[i].name %>
-                            </th>
-
-                            <th scope="col">
-                                <%= doctor.data[i].dni %>
-                            </th>
-                        </tr>
-                        <% } %>
-                </tbody>
-                <%} else { %>
-                    <div class="alert alert-dismissible alert-info">
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        ¡Aún no has ingresado a ningún paciente en este sitio! Presiona <a href="/crearPaciente" class="alert-link">aquí</a> para ingresar tu primer paciente.
-                    </div>
-                    <% } %>
-        </table>
-    </div>
-
-
 </body>
 
 </html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.2/dist/lux/bootstrap.min.css">
+    <style>
+
+        body {
+            display: grid;
+            text-align: center;
+            margin: auto;
+            place-content: center;
+            margin-top: 10%;
+            
+        }
+
+        img {
+            width: 10%;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="card text-white bg-warning mb-3" style="max-width: 20rem;">
+        <div class="card-header"><img class="logo" src="img/navimg.svg"></div>
+        <div class="card-body">
+            <h4 class="card-title">
+                <b><%= title %></b>
+            </h4>
+            <p class="card-text">
+                <%= body %>
+            </p>
+        </div>
+    </div>
+</body>
+
+</html>

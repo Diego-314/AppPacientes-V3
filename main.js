@@ -9,17 +9,36 @@ let zlib = require('zlib');
 
 // Base de Datos
 mongoose.connect('mongodb+srv://AyaAya:yjIUOFUNct75aQSM@hitagibot.dsrxwp1.mongodb.net/AppPacientes-V3').then(() => {
-  console.log('Conexión con la base de datos completada.')
+    console.log('Conexión con la base de datos completada.')
 }).catch((error) => {
-  console.log('No fue posible conectarse a MongoDB.')
-  console.log(error)
+    console.log('No fue posible conectarse a MongoDB.')
+    console.log(error)
 })
-    // Schema
+
+// Cookies de guardado de inicio de sesión
+const session = require("express-session");
+const MongoStore = require("connect-mongo").default;
+app.use(session({
+    secret: "clave-super-secreta",
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({
+        mongoUrl: "mongodb+srv://AyaAya:yjIUOFUNct75aQSM@hitagibot.dsrxwp1.mongodb.net/",
+        collectionName: "sessions"
+    }),
+    cookie: {
+        maxAge: 1000 * 60 * 60, // 1 hora
+        httpOnly: true,
+        secure: false
+    }
+}));
+
+// Schema
 let doctorSchema = new Schema({
-    name: {type: String},
-    password: {type: Buffer},
-    user: {type: String},
-    data: {type: Object}
+    name: { type: String },
+    password: { type: Buffer },
+    user: { type: String },
+    data: { type: Object }
 });
 let Doctor = mongoose.model('doctors', doctorSchema);
 
@@ -31,39 +50,44 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(process.cwd(), "public")));
 
 
+
+
 // Rutas
 
-    //index
+//index
 app.get("/", (req, res) => {
-   return res.sendFile(path.join(__dirname, "views", 'logIn.html'));
+    return res.sendFile(path.join(__dirname, "views", 'logIn.html'));
 });
-    // Se recibe la información del formulario logIn.html para iniciar sesión.
+// Se recibe la información del formulario logIn.html para iniciar sesión.
 app.post("/logIn", async (req, res) => {
-
     try {
-        
         let { user, password } = req.body;
         let doctor = await Doctor.findOne({ user: user.trim() })
-        if (doctor == null) return res.send("<h3>No se ha encontrado su nombre de Usuario</h3>");
+        if (doctor == null) return res.render("Error.ejs", { title: "Cuenta no encontrada", body: "Revise su nombre de usuario o cree una cuenta nueva." })
         let newPassword = zlib.inflateSync(doctor.password);
         if (password.trim() == newPassword) {
-            console.log(doctor);
-            return res.render("menu.ejs", { doctor })
+            req.session.userId = doctor._id;
+            return res.redirect('/inicio')
         } else {
-            return res.send('<h3>Contraseña incorrecta</h3>')
+            return res.render("Error.ejs", { title: "Contraseña incorrecta", body: "La contraseña ingresada es incorrecta. Por favor, retroceda e inténtelo nuevamente." })
         };
-
-
-
-
     } catch (e) {
         console.log(e)
         res.send("Ha ocurrido un error.");
     }
+});
+
+// Inicio
+
+app.get('/inicio', async (req, res) => {
+    if (!req.session.userId) return res.redirect("/login")
+    let doctor = await Doctor.findById(req.session.userId);
+    if (!doctor) return res.redirect("/login");
+    return res.render('menu.ejs', { doctor })
 
 });
 
-    // Crear una cuenta
+// Crear una cuenta
 app.get("/signUp", (req, res) => {
     return res.sendFile(path.join(__dirname, "views", 'signUp.html'));
 });
@@ -93,6 +117,20 @@ app.post("/signUp", async (req, res) => {
     }
 });
 
+app.get("/Pacientes", async (req, res) => {
+    if (!req.session.userId) return res.redirect("/login")
+    let doctor = await Doctor.findById(req.session.userId);
+    if (!doctor) return res.redirect("/login");
+    res.render('menu-pacientes.ejs', { doctor })
+
+});
+
+
+app.get("/logout", (req, res) => {
+    req.session.destroy(() => {
+        res.redirect("/");
+    });
+});
 
 // Configuraciones del puerto
 let PORT = process.env.PORT || 3000;
