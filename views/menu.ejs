@@ -58,7 +58,8 @@
                     <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Buscar</button>
                 </form>
                 <div class="d-flex m-1">
-                    <button class="btn btn-outline-danger my-2 my-sm-0" data-bs-toggle="modal" data-bs-target="#logOutModal">Cerrar sesión</button>
+                    <button class="btn btn-outline-danger my-2 my-sm-0" data-bs-toggle="modal"
+                        data-bs-target="#logOutModal">Cerrar sesión</button>
                 </div>
             </div>
         </div>
@@ -82,6 +83,9 @@
         </div>
     </div>
 
+
+
+
     <div class="welcome-text">
         <h1>¡Bienvenido, <%= doctor.name %>!</h1>
     </div>
@@ -99,25 +103,30 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <% for (let i=0; i < 5; i++) { %>
-                        <tr>
-                            <th scope="col">
-                                <%= doctor.data[i].surname %>
-                            </th>
-                            <th scope="col">
-                                <%= doctor.data[i].name %>
-                            </th>
+                    <% doctor.data.slice(0,5).forEach(paciente=> { %>
 
-                            <th scope="col">
-                                <%= doctor.data[i].dni %>
-                            </th>
-                        </tr>
-                        <% } %>
+                        <a href="buscarPaciente/<%= paciente.dni %>">
+                            <tr>
+                                <td scope="col">
+                                    <%= paciente.surname %>
+                                </td>
+                                <td scope="col">
+                                    <%= paciente.name %>
+                                </td>
+                                <td scope="col">
+                                    <%= paciente.dni %>
+                                </td>
+                            </tr>
+                        </a>
+
+
+                        <% }); %>
                 </tbody>
                 <%} else { %>
                     <div class="alert alert-dismissible alert-info">
                         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        ¡Aún no has ingresado a ningún paciente en este sitio! Presiona <a href="/crearPaciente" class="alert-link">aquí</a> para ingresar tu primer paciente.
+                        ¡Aún no has ingresado a ningún paciente en este sitio! Presiona <a href="/crearPaciente"
+                            class="alert-link">aquí</a> para ingresar tu primer paciente.
                     </div>
                     <% } %>
         </table>

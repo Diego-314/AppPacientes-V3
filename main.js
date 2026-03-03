@@ -38,7 +38,7 @@ let doctorSchema = new Schema({
     name: { type: String },
     password: { type: Buffer },
     user: { type: String },
-    data: { type: Object }
+    data: { type: Array }
 });
 let Doctor = mongoose.model('doctors', doctorSchema);
 
@@ -80,8 +80,9 @@ app.post("/logIn", async (req, res) => {
 // Inicio
 
 app.get('/inicio', async (req, res) => {
-    if (!req.session.userId) return res.redirect("/login")
-    let doctor = await Doctor.findById(req.session.userId);
+    if (!req.session.userId) return res.redirect("/logIn")
+    let doctor = await Doctor.findById(req.session.userId)
+        .select({ data: { $slice: 5 } });
     if (!doctor) return res.redirect("/login");
     return res.render('menu.ejs', { doctor })
 
@@ -117,12 +118,41 @@ app.post("/signUp", async (req, res) => {
     }
 });
 
-app.get("/Pacientes", async (req, res) => {
-    if (!req.session.userId) return res.redirect("/login")
-    let doctor = await Doctor.findById(req.session.userId);
-    if (!doctor) return res.redirect("/login");
-    res.render('menu-pacientes.ejs', { doctor })
 
+// Visualizador de pacientes 
+
+app.get("/Pacientes", async (req, res) => {
+    if (!req.session.userId) return res.redirect("/logIn")
+    
+    let page = parseInt(req.query.page) || 1;
+    const limit = 20;
+    const maxPage = 4;
+    const skip = (page - 1) * limit;
+
+    if (page < 1) page = 1;
+    if (page > maxPage) page = 4;
+
+    let doctor = await Doctor.findById(req.session.userId).select({ data: { $slice: [skip, limit] } })
+    if (!doctor) return res.redirect("/logIn");
+
+    return res.render('menu-pacientes.ejs', { doctor, page, maxPage });
+    
+});
+
+// Crear pacientes
+
+app.get('/crearPaciente', async (req, res) => {
+    if (!req.session.userId) return res.redirect("/logIn")
+    let doctor = await Doctor.findById(req.session.userId);
+    if (!doctor) return res.redirect("/logIn");
+    return res.sendFile(path.join(__dirname, 'views', 'crearPaciente.html'));
+});
+app.post('/crearPaciente', async (req, res) => {
+    if (!req.session.userId) return res.redirect("/logIn")
+    let doctor = await Doctor.findById(req.session.userId);
+    if (!doctor) return res.redirect("/logIn");
+    await Doctor.updateOne({ _id: req.session.userId }, { $push: { data: req.body } })
+    return res.redirect('/Pacientes');
 });
 
 
