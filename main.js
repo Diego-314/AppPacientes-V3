@@ -27,7 +27,7 @@ app.use(session({
         collectionName: "sessions"
     }),
     cookie: {
-        maxAge: 1000 * 60 * 60, // 1 hora
+        maxAge: 1000 * 60 * 60 * 3, // 1 hora
         httpOnly: true,
         secure: false
     }
@@ -80,7 +80,7 @@ app.post("/logIn", async (req, res) => {
 // Inicio
 
 app.get('/inicio', async (req, res) => {
-    if (!req.session.userId) return res.redirect("/logIn")
+    if (!req.session.userId) return res.redirect("/login")
     let doctor = await Doctor.findById(req.session.userId)
         .select({ data: { $slice: 5 } });
     if (!doctor) return res.redirect("/login");
@@ -123,7 +123,7 @@ app.post("/signUp", async (req, res) => {
 
 app.get("/Pacientes", async (req, res) => {
     if (!req.session.userId) return res.redirect("/logIn")
-    
+
     let page = parseInt(req.query.page) || 1;
     const limit = 20;
     const maxPage = 4;
@@ -136,7 +136,38 @@ app.get("/Pacientes", async (req, res) => {
     if (!doctor) return res.redirect("/logIn");
 
     return res.render('menu-pacientes.ejs', { doctor, page, maxPage });
-    
+
+});
+
+app.get('/buscarPaciente/:paciente', async (req, res) => {
+    if (!req.session.userId) return res.redirect("/logIn")
+    let doctor = await Doctor.findById(req.session.userId);
+    if (!doctor) return res.redirect("/logIn");
+
+    let result = false;
+    for (let i = 0; i < doctor.data.length; i++) {
+        if (req.params.paciente == doctor.data[i].dni) { result = i; break; }
+    };
+
+
+
+    if (result === false) return res.render('Error.ejs', { title: 'Error', body: 'No se pudo encontrar el paciente buscado. Intenta usando su número de DNI.' });
+
+    return res.render('ver-paciente.ejs', { info: doctor.data[result], index: result })
+});
+
+app.post('/actualizarPaciente', async (req, res) => {
+    if (!req.session.userId) return res.redirect("/logIn")
+    let doctor = await Doctor.findById(req.session.userId);
+    if (!doctor) return res.redirect("/logIn");
+
+    await Doctor.updateOne(
+        { _id: req.session.userId },
+        { $set: { [`data.${req.body.index}`]: req.body } }
+    );
+
+    return res.redirect('/Pacientes');
+
 });
 
 // Crear pacientes

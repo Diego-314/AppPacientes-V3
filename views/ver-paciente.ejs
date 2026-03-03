@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= info.name %>
+            <%= info.surname %>
+    </title>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.2/dist/lux/bootstrap.css">
+    <style>
+        .logo {
+            width: 50px;
+            height: auto;
+            display: block;
+            transition: 0.5s;
+        }
+
+        #formulario {
+            margin: 5% 5% 5% 5%;
+            text-align: center;
+        }
+
+        #formulario input {
+            margin-bottom: 1%;
+        }
+
+        .addBtn {
+            background: none;
+            border: 0px;
+        }
+
+        #formulario img:hover {
+            width: 55px;
+        }
+
+        textarea {
+            height: 150px;
+            /* Altura fija */
+            min-height: 50px;
+            /* Altura mínima */
+            resize: vertical;
+            /* Permite al usuario cambiar el alto, pero no el ancho */
+            margin-bottom: 1%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg bg-light" data-bs-theme="light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"><img class="logo" src="/img/navimg.svg"></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03"
+                aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarColor03">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Inicio">Inicio
+                            <span class="visually-hidden">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Configuración">Configuración</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/Pacientes">Pacientes</a>
+                    </li>
+                </ul>
+                <form class="d-flex">
+                    <input id="hhh" class="form-control me-sm-2" type="search" placeholder="Buscar paciente">
+                    <button class="btn btn-outline-primary my-2 my-sm-0" type="button"
+                        onclick="window.location.replace(`/buscarPaciente/${document.getElementById('hhh').value}`)">Buscar</button>
+                </form>
+                <div class="d-flex m-1">
+                    <button class="btn btn-outline-danger my-2 my-sm-0" data-bs-toggle="modal"
+                        data-bs-target="#logOutModal">Cerrar sesión</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="modal" id="logOutModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Cerrar sesión</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>¿Estás seguro de que quieres cerrar la sesión actual?</p>
+                </div>
+                <div class="modal-footer">
+                    <a href="/logOut"><button type="button" class="btn btn-danger">Cerrar sesión</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form id="formulario" method="post" action="/actualizarPaciente">
+
+        <legend>Información del paciente</legend>
+        <input readonly class="form-control" name="index" value="<%= index %>">
+        <input class="form-control" placeholder="Nombre del paciente" required name="name" value="<%= info.name %>">
+        <input class="form-control" placeholder="Apellido del paciente" required name="surname"
+            value="<%= info.surname %>">
+        <input class="form-control" placeholder="Edad del paciente" type="number" name="age" value="<%= info.age %>">
+        <input class="form-control" placeholder="Nro de Documento" type="number" required name="dni"
+            value="<%= info.dni %>">
+        <input class="form-control" placeholder="Obra social" name="coverage" value="<%= info.coverage %>">
+        <input class="form-control" placeholder="Nro de Afiliado" name="coverageNumber"
+            value="<%= info.coverageNumber %>">
+        <legend>Medicación</legend>
+
+        <fieldset id="med">
+            <% for (let i=0; i < info.meds.length; i++) { %>
+                <input name="meds[][nombre]" class="form-control" placeholder="Nombre de medicación"
+                    value="<%= info.meds[i].nombre %>">
+                <input name="meds[][dosis]" class="form-control" placeholder="Dosis" value="<%= info.meds[i].dosis %>">
+                <input name="meds[][plazo]" class="form-control" placeholder="Administración // Plazos"
+                    value="<%= info.meds[i].plazo %>">
+                <% } %>
+        </fieldset>
+
+        <button type="button" class="addBtn" onclick="añadirMedicacion()"><img class="logo"
+                src="/img/plusbox.svg"></button>
+        <legend>Antecedentes personales</legend>
+        <fieldset id="antecedentes">
+            <% for (let i=0; i < info.antecedentes.length; i++) { %>
+                <input name="antecedentes[]" class="form-control" placeholder="Hipertensión, diabetes, etc" value="<%= info.antecedentes[i] %>">
+            <% } %>
+        </fieldset>
+        <button type="button" class="addBtn" onclick="añadirAntecedente()"><img class="logo"
+                src="/img/plusbox.svg"></button>
+        <legend>Enfermedad actual</legend>
+        <textarea class="form-control" name="disease"><%= info.disease %></textarea>
+        <legend>Indicaciones</legend>
+        <fieldset id="indicaciones">
+             <% for (let i=0; i < info.indicaciones.length; i++) { %>
+            <textarea name="indicaciones[]" class="form-control"><%= info.indicaciones[i] %></textarea>
+            <% } %>
+        </fieldset>
+        <button type="button" class="addBtn" onclick="añadirIndicaciones()"><img class="logo"
+                src="/img/plusbox.svg"></button>
+        <br>
+        <br>
+        <button class="btn btn-primary" type="submit">Guardar</button>
+
+
+    </form>
+    <script>
+
+        const textarea = document.querySelector('textarea');
+        textarea.addEventListener('input', function () {
+            this.style.height = 'auto'; // Resetea para calcular el scrollHeight real
+            this.style.height = (this.scrollHeight) + 'px'; // Ajusta la altura
+        });
+
+        var añadirAntecedente = () => {
+            let inputAgregado = document.createElement('input');
+            inputAgregado.className = 'form-control'
+            inputAgregado.placeholder = 'Hipertensión, diabetes, etc';
+            inputAgregado.name = 'antecedentes[]';
+            document.getElementById('antecedentes').appendChild(inputAgregado);
+        };
+
+        var añadirIndicaciones = () => {
+            let textareaAdd = document.createElement('textarea');
+            textareaAdd.className = 'form-control';
+            textareaAdd.name = 'indicaciones[]'
+            document.getElementById('indicaciones').appendChild(textareaAdd);
+        };
+
+        var añadirMedicacion = () => {
+            let input1 = document.createElement('input');
+            let input2 = document.createElement('input');
+            let input3 = document.createElement('input');
+            input1.className = 'form-control';
+            input2.className = 'form-control';
+            input3.className = 'form-control';
+            input1.placeholder = 'Nombre de medicación'
+            input2.placeholder = 'Dosis'
+            input3.placeholder = 'Administración // Plazos'
+            input1.name = 'meds[][nombre]'
+            input2.name = 'meds[][dosis]'
+            input3.name = 'meds[][plazo]'
+            document.getElementById('med').append(input1, input2, input3);
+        };
+
+    </script>
+
+</body>
+
+</html>

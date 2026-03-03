@@ -54,8 +54,8 @@
                     </li>
                 </ul>
                 <form class="d-flex">
-                    <input class="form-control me-sm-2" type="search" placeholder="Buscar paciente">
-                    <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Buscar</button>
+                    <input id="hhh" class="form-control me-sm-2" type="search" placeholder="Buscar paciente">
+                    <button class="btn btn-outline-primary my-2 my-sm-0" type="button" onclick="window.location.replace(`buscarPaciente/${document.getElementById('hhh').value}`)">Buscar</button>
                 </form>
                 <div class="d-flex m-1">
                     <button class="btn btn-outline-danger my-2 my-sm-0" data-bs-toggle="modal"
@@ -90,11 +90,11 @@
         <h1>¡Bienvenido, <%= doctor.name %>!</h1>
     </div>
 
-    <div class="m-5">
+    <div class="">
         <table class="table table-hover">
 
 
-            <% if (!doctor.data==null) { %>
+            <% if (doctor.data && doctor.data.length> 0) { %>
                 <thead>
                     <tr>
                         <th scope="col">Apellido</th>
@@ -107,14 +107,19 @@
 
                         <a href="buscarPaciente/<%= paciente.dni %>">
                             <tr>
-                                <td scope="col">
+                                <td>
                                     <%= paciente.surname %>
                                 </td>
-                                <td scope="col">
+                                <td>
                                     <%= paciente.name %>
                                 </td>
-                                <td scope="col">
+                                <td>
                                     <%= paciente.dni %>
+                                </td>
+                                <td>
+                                    <a href="buscarPaciente/<%= paciente.dni %>">
+                                        <img style="width: 20px;" src="img/search.svg">
+                                    </a>
                                 </td>
                             </tr>
                         </a>
