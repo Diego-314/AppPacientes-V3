@@ -28,6 +28,23 @@
                 transform: translateY(0);
             }
         }
+
+          #tabla {
+
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-left: 0%;
+        }
+
+        .a {
+            display: flex;
+            place-content: center;
+        }
     </style>
 </head>
 
@@ -90,7 +107,7 @@
         <h1>¡Bienvenido, <%= doctor.name %>!</h1>
     </div>
 
-    <div class="">
+    <div id="tabla">
         <table class="table table-hover">
 
 
